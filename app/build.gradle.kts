@@ -66,9 +66,11 @@ dependencies {
     implementation(libs.hilt.navigation.compose)
     ksp(libs.dagger.hilt.compiler)
     ksp(libs.hilt.compiler)
-
-    testImplementation(libs.junit)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.gson)
+    implementation(libs.okhttp.logging.interceptor)
+    implementation(libs.paging.runtime)
+    implementation(libs.paging.compose)
 
     debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
 }

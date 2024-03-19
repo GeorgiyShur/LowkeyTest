@@ -17,29 +17,28 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import com.georgiyshur.lowkeytest.R
-import com.georgiyshur.lowkeytest.list.presentation.ListViewModel
 import com.georgiyshur.lowkeytest.list.presentation.PhotoItem
+import com.georgiyshur.lowkeytest.list.presentation.PhotosListViewModel
 import com.georgiyshur.lowkeytest.ui.theme.Typography
 
 @Composable
 internal fun ListScreen(
-    viewModel: ListViewModel = hiltViewModel(),
+    viewModel: PhotosListViewModel = hiltViewModel(),
 ) {
-    val items = viewModel.photoItems
     Scaffold(
         topBar = {
             TopAppBar(
@@ -49,14 +48,15 @@ internal fun ListScreen(
             )
         },
     ) { contentPadding ->
+        val pagingItems = viewModel.photosPagingData.collectAsLazyPagingItems()
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             contentPadding = contentPadding,
         ) {
             items(
-                count = items.size,
+                count = pagingItems.itemCount,
                 itemContent = { index ->
-                    val item = items[index]
+                    val item = pagingItems[index] ?: return@items
                     PhotoItem(
                         item = item,
                         onClick = { /* TODO */ },
@@ -83,17 +83,17 @@ private fun PhotoItem(
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        AsyncImage(
-            modifier = Modifier
-                .size(72.dp)
-                .clip(
-                    shape = RoundedCornerShape(16.dp)
-                )
-                .shadow(elevation = 8.dp),
-            model = item.imageUrl,
-            contentDescription = item.name,
-            contentScale = ContentScale.Crop,
-        )
+        Surface(
+            modifier = Modifier.size(80.dp),
+            shape = RoundedCornerShape(16.dp),
+            shadowElevation = 8.dp,
+        ) {
+            AsyncImage(
+                model = item.url,
+                contentDescription = item.name,
+                contentScale = ContentScale.Crop,
+            )
+        }
         Spacer(modifier = Modifier.width(16.dp))
         Column {
             Text(
@@ -102,7 +102,7 @@ private fun PhotoItem(
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = item.author,
+                text = item.photographer,
                 style = Typography.bodyLarge,
             )
         }
