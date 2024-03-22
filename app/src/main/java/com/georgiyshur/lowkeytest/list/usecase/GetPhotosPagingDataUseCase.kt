@@ -1,10 +1,11 @@
-package com.georgiyshur.lowkeytest.list.domain.usecase
+package com.georgiyshur.lowkeytest.list.usecase
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.georgiyshur.lowkeytest.list.domain.Photo
-import com.georgiyshur.lowkeytest.list.domain.PhotosRepository
+import com.georgiyshur.lowkeytest.data.PER_PAGE_DEFAULT
+import com.georgiyshur.lowkeytest.domain.Photo
+import com.georgiyshur.lowkeytest.domain.PhotosRepository
 import com.georgiyshur.lowkeytest.list.paging.PhotosPagingSource
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -21,7 +22,7 @@ internal class GetPhotosPagingDataUseCase @Inject constructor(
         }
 
         return Pager(
-            config = PagingConfig(pageSize = 15),
+            config = PagingConfig(pageSize = PER_PAGE_DEFAULT),
             pagingSourceFactory = pagingSourceFactory,
         ).flow
     }

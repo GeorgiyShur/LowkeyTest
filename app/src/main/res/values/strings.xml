@@ -2,4 +2,5 @@
     <string name="app_name">Lowkey test</string>
     <string name="list_title">Photos</string>
     <string name="by_photographer">by %s</string>
+    <string name="name_by_photographer">%1$s by %2$s</string>
 </resources>

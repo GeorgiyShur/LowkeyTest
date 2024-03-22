@@ -1,4 +1,4 @@
-package com.georgiyshur.lowkeytest.list.domain
+package com.georgiyshur.lowkeytest.domain
 
 internal data class Photo(
     val avgColor: String,

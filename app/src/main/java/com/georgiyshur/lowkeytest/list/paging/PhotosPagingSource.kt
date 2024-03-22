@@ -3,8 +3,8 @@ package com.georgiyshur.lowkeytest.list.paging
 import android.net.Uri
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.georgiyshur.lowkeytest.list.domain.Photo
-import com.georgiyshur.lowkeytest.list.domain.PhotosRepository
+import com.georgiyshur.lowkeytest.domain.Photo
+import com.georgiyshur.lowkeytest.domain.PhotosRepository
 
 internal class PhotosPagingSource(
     private val repository: PhotosRepository,

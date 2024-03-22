@@ -6,8 +6,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
-import com.georgiyshur.lowkeytest.list.domain.Photo
-import com.georgiyshur.lowkeytest.list.domain.usecase.GetPhotosPagingDataUseCase
+import com.georgiyshur.lowkeytest.domain.Photo
+import com.georgiyshur.lowkeytest.list.usecase.GetPhotosPagingDataUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

@@ -41,7 +41,8 @@ import com.georgiyshur.lowkeytest.list.presentation.PhotosListViewModel
 import com.georgiyshur.lowkeytest.ui.theme.Typography
 
 @Composable
-internal fun ListScreen(
+internal fun PhotosListScreen(
+    onPhotoClick: (String) -> Unit,
     viewModel: PhotosListViewModel = hiltViewModel(),
 ) {
     Scaffold(
@@ -85,7 +86,7 @@ internal fun ListScreen(
                         val item = pagingItems[index] ?: return@items
                         PhotoItem(
                             item = item,
-                            onClick = { /* TODO */ },
+                            onClick = { onPhotoClick(item.id) },
                         )
                     }
                 )

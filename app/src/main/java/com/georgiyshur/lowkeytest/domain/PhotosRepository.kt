@@ -1,7 +1,6 @@
-package com.georgiyshur.lowkeytest.list.domain
+package com.georgiyshur.lowkeytest.domain
 
-import com.georgiyshur.lowkeytest.list.data.PER_PAGE_DEFAULT
-import com.georgiyshur.lowkeytest.list.data.PhotosRemoteSource
+import com.georgiyshur.lowkeytest.data.PhotosRemoteSource
 import javax.inject.Inject
 
 internal class PhotosRepository @Inject constructor(
@@ -15,4 +14,6 @@ internal class PhotosRepository @Inject constructor(
         page = page,
         perPage = perPage,
     )
+
+    suspend fun fetchPhotoDetail(id: String) = remoteSource.fetchPhotoDetail(id)
 }

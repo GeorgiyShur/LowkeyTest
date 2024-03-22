@@ -4,10 +4,13 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.georgiyshur.lowkeytest.list.ui.ListScreen
+import androidx.navigation.navArgument
+import com.georgiyshur.lowkeytest.detail.ui.PhotoDetailScreen
+import com.georgiyshur.lowkeytest.list.ui.PhotosListScreen
 import com.georgiyshur.lowkeytest.ui.theme.LowkeyTestTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -34,7 +37,23 @@ private fun Navigation() {
         composable(
             route = Destinations.List.route,
         ) {
-            ListScreen()
+            PhotosListScreen(
+                onPhotoClick = {
+                    navController.navigate(Destinations.Detail.createRoute(it))
+                }
+            )
+        }
+        composable(
+            route = Destinations.Detail.route,
+            arguments = listOf(
+                navArgument(Destinations.ARG_PHOTO_ID) {
+                    type = NavType.StringType
+                },
+            ),
+        ) {
+            PhotoDetailScreen(
+                onBack = { navController.popBackStack() }
+            )
         }
     }
 }

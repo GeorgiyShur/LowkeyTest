@@ -1,8 +1,10 @@
-package com.georgiyshur.lowkeytest.list.data
+package com.georgiyshur.lowkeytest.data
 
 import com.georgiyshur.lowkeytest.api.ApiPhoto
+import com.georgiyshur.lowkeytest.api.ApiPhotoDetail
 import com.georgiyshur.lowkeytest.api.PhotosApi
-import com.georgiyshur.lowkeytest.list.domain.Photo
+import com.georgiyshur.lowkeytest.domain.Photo
+import com.georgiyshur.lowkeytest.domain.PhotoDetail
 import com.georgiyshur.lowkeytest.list.paging.PagedList
 import javax.inject.Inject
 
@@ -14,6 +16,8 @@ internal interface PhotosRemoteSource {
         page: Int?,
         perPage: Int,
     ): PagedList<Photo>
+
+    suspend fun fetchPhotoDetail(id: String): PhotoDetail
 }
 
 internal class PhotosRemoteSourceImpl @Inject constructor(
@@ -34,12 +38,23 @@ internal class PhotosRemoteSourceImpl @Inject constructor(
         )
     }
 
+    override suspend fun fetchPhotoDetail(id: String): PhotoDetail {
+        return api.getPhotoDetail(id).toPhotoDetail()
+    }
+
     private fun ApiPhoto.toPhoto(): Photo {
         return Photo(
             avgColor = avgColor,
             id = id,
             name = alt,
             photographer = photographer,
+            url = src.original,
+        )
+    }
+
+    private fun ApiPhotoDetail.toPhotoDetail() : PhotoDetail {
+        return PhotoDetail(
+            name = alt,
             url = src.original,
         )
     }
