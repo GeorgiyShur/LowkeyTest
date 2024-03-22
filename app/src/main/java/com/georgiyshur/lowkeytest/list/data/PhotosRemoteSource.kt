@@ -36,10 +36,11 @@ internal class PhotosRemoteSourceImpl @Inject constructor(
 
     private fun ApiPhoto.toPhoto(): Photo {
         return Photo(
+            avgColor = avgColor,
             id = id,
             name = alt,
             photographer = photographer,
-            url = url,
+            url = src.original,
         )
     }
 }

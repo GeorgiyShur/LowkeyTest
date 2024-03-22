@@ -1,5 +1,6 @@
 package com.georgiyshur.lowkeytest.list.presentation
 
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -25,6 +26,7 @@ internal class PhotosListViewModel @Inject constructor(
 
     private fun Photo.toPhotoItem(): PhotoItem {
         return PhotoItem(
+            avgColor = Color(android.graphics.Color.parseColor(avgColor)),
             id = id,
             name = name,
             photographer = photographer,
