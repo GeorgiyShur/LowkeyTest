@@ -4,6 +4,7 @@ package com.georgiyshur.lowkeytest.list.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -15,16 +16,23 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import com.georgiyshur.lowkeytest.R
@@ -46,19 +54,45 @@ internal fun ListScreen(
         },
     ) { contentPadding ->
         val pagingItems = viewModel.photosPagingData.collectAsLazyPagingItems()
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = contentPadding,
+        val pagingItemsRefreshState by remember(pagingItems) {
+            derivedStateOf { pagingItems.loadState.refresh }
+        }
+
+        val pullRefreshState = rememberPullToRefreshState()
+        if (pullRefreshState.isRefreshing) {
+            LaunchedEffect(true) {
+                pagingItems.refresh()
+            }
+        }
+        LaunchedEffect(pagingItemsRefreshState) {
+            if (pagingItemsRefreshState != LoadState.Loading) {
+                pullRefreshState.endRefresh()
+            }
+        }
+
+        Box(
+            modifier = Modifier
+                .nestedScroll(pullRefreshState.nestedScrollConnection)
+                .padding(contentPadding)
         ) {
-            items(
-                count = pagingItems.itemCount,
-                itemContent = { index ->
-                    val item = pagingItems[index] ?: return@items
-                    PhotoItem(
-                        item = item,
-                        onClick = { /* TODO */ },
-                    )
-                }
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(vertical = 8.dp),
+            ) {
+                items(
+                    count = pagingItems.itemCount,
+                    itemContent = { index ->
+                        val item = pagingItems[index] ?: return@items
+                        PhotoItem(
+                            item = item,
+                            onClick = { /* TODO */ },
+                        )
+                    }
+                )
+            }
+            PullToRefreshContainer(
+                modifier = Modifier.align(Alignment.TopCenter),
+                state = pullRefreshState,
             )
         }
     }
